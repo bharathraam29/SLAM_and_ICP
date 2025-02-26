@@ -115,9 +115,9 @@ def ICP(source_pc, target_pc,init_T):
     
     filtered_idx = np.where(dist_between_corresponding_pc_pts < filter_dist_threshold)
     
-    sampled_source_pc=sampled_source_pc[filtered_idx]
+    sampled_source_pc=sampled_source_pc#[filtered_idx]
     # moved_target_pc=moved_target_pc[corres_idxs][filtered_idx]
-    moved_target_pc = moved_target_pc[corres_idxs][filtered_idx]
+    moved_target_pc = moved_target_pc[corres_idxs]#[filtered_idx]
     for itr in (range(max_iters)):
         dist, corres_idxs = get_corres_points(moved_target_pc,sampled_source_pc)
 

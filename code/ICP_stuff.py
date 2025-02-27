@@ -52,7 +52,6 @@ def ICP_warm_up(source_pc, target_pc,number_of_yaw_splits=4, viz= False):
         dist, corres_idxs = get_corres_points(moved_target_pc,sampled_source_pc)
         # print(dist)
         dist_between_corresponding_pc_pts= np.linalg.norm(sampled_source_pc-moved_target_pc[corres_idxs],axis=1)
-        
         filtered_idx = np.where(dist_between_corresponding_pc_pts < filter_dist_threshold)
         
         sampled_source_pc=sampled_source_pc[filtered_idx]
@@ -91,20 +90,17 @@ def ICP_warm_up(source_pc, target_pc,number_of_yaw_splits=4, viz= False):
 
 
 
-def ICP(source_pc, target_pc,init_T):
+def ICP(source_pc, target_pc,init_T,filter_dist_threshold=0.2, return_dist=False ):
 
-    max_iters= 100
-    filter_dist_threshold= 0.5
+    max_iters= 1000
+    filter_dist_threshold= filter_dist_threshold
 
     sampled_target_pc= target_pc[::]
     sampled_source_pc= source_pc[::]
     euclidean_dist= []
     best_pose=[]
-
-
     # print("Initial Pose:\n ",init_T)
     init_R, init_p= get_R_and_P(init_T)
-    
 
     moved_target_pc= rotate_pc(init_R, sampled_target_pc)+init_p
     prev_euclidean_dist= 0
@@ -115,9 +111,9 @@ def ICP(source_pc, target_pc,init_T):
     
     filtered_idx = np.where(dist_between_corresponding_pc_pts < filter_dist_threshold)
     
-    sampled_source_pc=sampled_source_pc#[filtered_idx]
+    sampled_source_pc=sampled_source_pc[filtered_idx]
     # moved_target_pc=moved_target_pc[corres_idxs][filtered_idx]
-    moved_target_pc = moved_target_pc[corres_idxs]#[filtered_idx]
+    moved_target_pc = moved_target_pc[corres_idxs][filtered_idx]
     for itr in (range(max_iters)):
         dist, corres_idxs = get_corres_points(moved_target_pc,sampled_source_pc)
 
@@ -141,11 +137,13 @@ def ICP(source_pc, target_pc,init_T):
         if np.abs(dist-prev_euclidean_dist) < 1e-10:
             best_dist= dist
             best_pose = accumulated_pose
-            return best_pose
+            #print("Stopped because of convergence")
             break
         prev_euclidean_dist = dist
         # print(dist)
     # print(accumulated_pose, best_dist)
-    euclidean_dist.append(best_dist)
-    best_pose.append(accumulated_pose)
+    # euclidean_dist.append(dist)
+    # best_pose.append(accumulated_pose)
+    if return_dist:
+        return accumulated_pose, dist
     return accumulated_pose

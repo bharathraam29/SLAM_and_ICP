@@ -1,3 +1,7 @@
+# LiDAR SLAM and ICP implementation
+This repository implements LiDAR SLAM, and utilizes Factor graph optimization to introduces loop closure constraints based on proximity at fixed intervals. 
+The steps to use the repo is as below.
+
 Final runner.ipynb : Is the notebook to run the Lidar SLAM. set the "dataset_idx" in the top of the notebook and you can run all the cells. The trajectories, occupancy and textured grid map will be displayed as inline outputs
 
 ICP_stuff.py : has all the implementations involving ICP.

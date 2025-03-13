@@ -2,6 +2,8 @@
 This repository implements LiDAR SLAM, and utilizes Factor graph optimization to introduces loop closure constraints based on proximity at fixed intervals. 
 Occupancy grid is also constructedd using logodds update, and a razterized version of the occupancy map is also constructed using the RBGD images. 
 
+*Check LIDAR SLAM Report.pdf to know more about the implementation and problem formulation*
+
 The steps to use the repo is as below.
 
 Final runner.ipynb : Is the notebook to run the Lidar SLAM. set the "dataset_idx" in the top of the notebook and you can run all the cells. The trajectories, occupancy and textured grid map will be displayed as inline outputs
